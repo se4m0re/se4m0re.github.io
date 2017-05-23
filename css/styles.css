@@ -1,0 +1,95 @@
+* { margin: 0; padding: 0 }
+html, body { height: 100%; }
+body {
+	color: #545454;
+	background-color: #f2f2f2;
+	font-family: 'Lato', helvetica, sans-serif;
+	line-height: 1.5;
+}
+h2 { text-align: center; font-size: 2.4em; }
+li a { text-decoration: none; color: inherit }
+footer { background-color: #333; }
+header {
+  position: fixed;
+  padding: 1%;
+  top: 0;
+  left: 0;
+  height: 44px;
+  width: 98%;
+  background-color: white;
+  box-shadow: 0px 1px 10px;
+}
+header[class="alt"] {
+  background-color: transparent;
+  box-shadow: none;
+  color: #f2f2f2;
+}
+div[class="abstract container"] p {
+  font-size: 1.25em;
+  font-weight: 300;
+  line-height: 1.75em;
+  margin-bottom: 100px;
+  text-align: center;
+}
+section[class="publication section"] { 
+  margin: auto; 
+  max-width: 960px;
+  min-width: 640px;
+  padding-top: 150px; 
+  padding-bottom: 80px;
+}
+div[class="container"] { 
+  margin: auto; 
+  max-width: 960px;
+  min-width: 640px;
+  padding-top: 100px; 
+  padding-bottom: 80px;
+}
+div[class="slider container"] { position: relative; }
+img[class="slider image"] { 
+  display: block;
+  margin-left: 24%;
+  margin-right: 24%;
+  width: 52%;
+}
+ol[class="publication list"] {
+  background-color: white;
+  border-radius: 25px; 
+  margin: auto; 
+  padding: 5%;
+  width: 70%; 
+}
+button[class~="slider"][class~="arrow"] {
+  border-radius: 50%;
+  border-style: none;
+  height: 9.62%;
+  position: absolute;
+  text-align: center;
+  top: 45.19%;
+  width: 5%
+}
+button[class="slider arrow left"] { left: 9.5%; }
+button[class="slider arrow right"] { right: 9.5%; }
+li[class="publication reference"] { margin: 40px; padding: 0px; }
+span[class~="publication"] { font-style: italic; }
+span[class="publication journal"] { font-weight: bold; }
+a[class~="link"] { text-decoration: none; }
+a[class="pdf link"] { font-style: italic; color: #e0555a}
+header + #banner { padding-top: 150px; }
+div#banner {
+  background: url(../bw_neuron.jpg) no-repeat; 
+  background-size: cover;
+  padding-bottom: 35.25%;
+  width: 100%;
+}
+ul#navbar {
+  list-style-type: none;
+  overflow: hidden;
+}
+ul#navbar a {
+  display: block;
+  padding: 10px;
+  text-align: center;
+}
+
+<!-- vim: set tabstop=2 shiftwidth=2 expandtab number hls is: -->

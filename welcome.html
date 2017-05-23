@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head> 
+		<title>Welcome</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Qualls-Creekmore Lab welcome page">
+		<meta name="author" content="Sean Creekmore">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<link href="css/styles.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+    <header class="alt" id="header"></header>
+    <div id="banner">
+			<h1>Welcome to the Qualls-Creekmore Lab Homepage</h1>
+    </div>
+    <div class="container">
+      <div class="abstract container">
+        <h2>Abstract</h2>
+        <p>
+          The Qualls-Creekmore lab is interested in the connections within the brain that drive both mood and feeding behavior. Essentially, how does our mood intertwine with our decision to eat? You often hear that when we are stressed, depressed or anxious that we eat more. Our work seems to indicate that these brain circuits may be the reason we have comorbidities like obesity and anxiety or depression, but right now we don’t know which comes first. Does the stress cause the change in eating behavior or does the eating behavior cause the anxiety and depression?
+        </p>
+      </div>
+      <div class="slider container">
+        <img class="slider image" src="neurons_500x500.jpg" alt="neuron">
+        <img class="slider image" src="neurons_500x500_bw.jpg" alt="neuron">
+        <button class="slider arrow left" onclick="plusDivs(-1)">&lt</button>
+        <button class="slider arrow right" onclick="plusDivs(-1)">&gt</button>
+      </div> 
+    </div>
+    <footer>footer</footer>
+    <script>
+      $(document).ready(function() {
+                $("#header").load("header.html");
+      });
+
+      var slideIndex = 1;
+      showDivs(slideIndex);
+
+      function plusDivs(n) {
+        showDivs(slideIndex += n);
+      }
+
+      function showDivs(n) {
+        var i;
+        var x = document.getElementsByClassName("slider image");
+        if (n > x.length) {slideIndex = 1} 
+        if (n < 1) {slideIndex = x.length} ;
+        for (i = 0; i < x.length; i++) {
+                  x[i].style.display = "none"; 
+        }
+        x[slideIndex-1].style.display = "block"; 
+      } 
+
+      function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          var later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          };
+          var callNow = immediate && !timeout;
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+          if (callNow) func.apply(context, args);
+        };
+      };
+
+      var myEfficientFn = debounce(function() {
+        console.log(document.body.scrollTop, window.innerHeight);
+        var header = document.getElementsByTagName('header')[0];
+        if ((document.body.scrollTop / window.innerHeight) > 0.5577) {
+          header.className = "solid";
+        } else {
+          header.className = "alt";
+        }
+      }, 1);
+
+      window.addEventListener('scroll', myEfficientFn);
+
+    </script>
+	</body>
+</html>
+
+<!-- vim: set tabstop=2 shiftwidth=2 expandtab number hls is: -->

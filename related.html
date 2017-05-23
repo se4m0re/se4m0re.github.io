@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Recent Publications</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="List of related publications">
+    <meta name="author" content="Sean Creekmore">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link href="css/styles.css" type="text/css" rel="stylesheet">
+  </head>
+  <body>
+    <header id="header"> </header>
+    <section class="publication section">
+      <h2>Related Publications</h2>
+      <ol class="publication list">
+      <div style="margin: 40px;"><a class="link" href="https://scholar.google.com/scholar?q=author%3A%22E+Qualls-Creekmore%22&btnG=&amp;hl=en&as_sdt=1%2C5&amp;as_vis=1" target="_blank" style="color: #e0555a;";>(FULL LIST ON GOOGLE SCHOLAR)</a></div>
+        <li class="publication reference">Holmes, G. M., Browning, K. N., Tong, M., Qualls-Creekmore, E. &amp; Travagli, R. A. (2009). Vagally mediated effects of glucagon-like peptide 1: in vitro and in vivo gastric actions. <span class="publication journal">The Journal of Physiology</span>, 587(19), 4749-4759.<a class="pdf link" href=""> PDF</a></li>
+      </ol>
+    </section>
+    <footer>footer</footer>
+    <script>
+      $(document).ready(function() {
+                $("#header").load("header.html");
+      });
+    </script>
+  </body>
+  <script>
+    var searchTerm = '(' 
+    + '(\"galanin\"[MeSH Terms] OR \"galanin\"[All Fields]) ' 
+    + 'OR (\"hypothalamus\"[MeSH Terms] OR \"hypothalamus\"[All Fields])' 
+    + ') AND (' 
+    + '(\"anxiety\"[MeSH Terms] OR \"anxiety\"[All Fields]) ' 
+    + 'OR feeding[All Fields] ' 
+    + 'OR dreadd[All Fields] ' 
+    + 'OR (\"reward\"[MeSH Terms] OR \"reward\"[All Fields])' 
+    + ') AND (' 
+    + '\"2017/04/01\"[PDAT] : \"2017/04/30\"[PDAT]' 
+    + ')';
+
+    function httpGet(url, callback) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open( "GET", url, true); // false for synchronous request
+      xmlHttp.responseType = 'json';
+      xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) callback(xmlHttp.response);
+      }
+      xmlHttp.send();
+    }
+
+    function requestPublicationList(callback) {
+      httpGet('https://eutils.ncbi.nlm.nih.gov/entrez' 
+              + '/eutils/esearch.fcgi' 
+              + '?db=pubmed' 
+              + '&retmode=json' 
+              + '&term=' 
+              + encodeURIComponent(searchTerm), 
+              function (responseReturned) { 
+                var response = responseReturned;
+                httpGet('https://eutils.ncbi.nlm.nih.gov/entrez' 
+                    + '/eutils/esummary.fcgi' 
+                    + '?db=pubmed' 
+                    + '&retmode=json' 
+                    + '&id=' 
+                    + response.esearchresult.idlist.join(), 
+                    function (responseReturned) { 
+                      localStorage.setItem('pubList',
+                          JSON.stringify({ 
+                            'dateRequested': new Date(), 
+                            'result': responseReturned.result
+                          }));
+                      callback();
+                    });
+              });
+    };
+
+    function appendPublicationList() {
+      var list = JSON.parse(localStorage.getItem('pubList'));
+      if (list === null || new Date(list.dateRequested).getMonth() < new Date().getMonth()) {
+        requestPublicationList(appendPublicationList);
+      } else {
+        var ul = document.getElementsByClassName('publication list')[0];
+        var uids = list.result.uids;
+        for (var i in uids) {
+          var result = list.result[uids[i]];
+          var publication = { 
+            authors: result.authors.map(function (e) { return e.name; } ).join(', '),
+            date: new Date(result.sortpubdate),
+            title: result.title,
+            journal: result.fulljournalname,
+            volume: result.volume,
+            issue: result.issue,
+            pages: result.pages
+          }
+          window.publication = publication;
+          var textNode1 = document.createTextNode(publication.authors 
+              + ' ' 
+              + '(' 
+              +  publication.date.getFullYear() 
+              + '). ' 
+              + publication.title 
+              + ' ');
+          var span = document.createElement('span');
+          span.className = 'publication journal';
+          span.appendChild(document.createTextNode(publication.journal));
+          var textNode2 = document.createTextNode(', ' 
+              + publication.volume 
+              + '(' 
+              + publication.issue 
+              + '), ' 
+              + publication.pages 
+              + '.');
+          var li = document.createElement('li');
+          li.className = 'publication reference';
+          li.appendChild(textNode1);
+          li.appendChild(span);
+          li.appendChild(textNode2);
+          ul.appendChild(li);
+        }
+      }
+    };
+
+    if (typeof(Storage) !== "undefined") {
+      appendPublicationList();
+    } else {
+      window.alert("Sorry, your browser does not support Web Storage...");
+    }
+
+  </script>
+</html>
+
+<!-- vim: set tabstop=2 shiftwidth=2 expandtab number hls is: -->
